@@ -246,7 +246,7 @@ transition: border-color 0.1s, border-radius 0.1s, background-color 0.1s;
 <div class="signup">
 
     <h3 class="createaccount">Already have an account</h3>
-    <a href="/login/signup/index.html" class="signupb">Login here</a>
+    <a href="/index.html" class="signupb">Login here</a>
     
     </div>
 
@@ -313,7 +313,7 @@ firebase.initializeApp(firebaseConfig);
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
      
-        window.location.href = "index.html";
+        window.location.href = "/index.html";
       })
       .catch((error) => {
        
