@@ -11,12 +11,60 @@
     
 <main class="main">
 
+    <div class="extra">
 <div class="logo">
 
-    
+   <img src="/assets/1000_F_501903811_pA3IGrb7DgwZeFfb3WY5GxtjgVinOMpm-removebg-preview.png" 
+    width="170px" height="200px"> 
+
 </div>
-    <div class="login"></div>
+
+    <div class="login">
+
+<h1 class="userL">User Login</h1>
+
+<form id="loginForm">
+
+
+    <div class="email" >
+<img src="/assets/person.svg" width="15px" height="13px" >
+<input type="text" required placeholder="Email Address" id="email"> </div> <br>
+
+<div class="password">
+<img src="/assets/padlock.png" width="15px" height="13px"  >    
+<input type="password" required placeholder="Password" id="password">
+</div>
+<br>
+
+
+<button id="login">Login</button><br/>
+</form>
+
+
+<div class="signup">
+
+<h3 class="createaccount">Create an account</h3>
+<a href="/login/signup/signup.html" class="signupb">Signup now</a>
+
+</div>
+<h3 class="or">OR</h3>
+<br>
+
+
+ <button id="google" style="display: flex; align-items: center;">
+    <img src="/assets/google.png" width="15px" height="15px" style="margin-right: 5px;">
+            <span style="margin-left: 8px;">Log in with Google</span>
+          </button>
+          
+    </div>
+</div>
 </main>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script src="./script.js"></script> 
 
 </body>
 </html>

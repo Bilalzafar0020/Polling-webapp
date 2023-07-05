@@ -1,0 +1,32 @@
+
+    .poll-option {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .poll-option input[type="checkbox"] {
+        margin-right: 10px;
+    }
+
+    .poll-bar-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        background-color: #f2f2f2;
+        height: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .poll-bar {
+        background-color: #4caf50;
+        height: 100%;
+        transition: width 0.5s ease-in-out;
+    }
+
+    .percentage-label {
+        margin-left: 10px;
+        font-weight: bold;
+    }
+
