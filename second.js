@@ -8,9 +8,22 @@ const bars = document.querySelectorAll('.poll-bar');
 options.forEach((option, index) => {
   const checkbox = option.querySelector('input[type="checkbox"]');
   checkbox.addEventListener('change', () => {
+    if (checkbox.checked) {
+      uncheckOtherOptions(checkbox);
+    }
     updatePollResults();
   });
 });
+
+// Function to uncheck other options when a checkbox is checked
+function uncheckOtherOptions(checkedCheckbox) {
+  options.forEach((option) => {
+    const checkbox = option.querySelector('input[type="checkbox"]');
+    if (checkbox !== checkedCheckbox) {
+      checkbox.checked = false;
+    }
+  });
+}
 
 // Function to update the poll results
 function updatePollResults() {
@@ -23,7 +36,7 @@ function updatePollResults() {
     const bar = option.querySelector('.poll-bar');
     const percentageLabel = option.querySelector('.percentage-label');
     const isChecked = checkbox.checked;
-    
+
     if (isChecked) {
       const usersSelected = calculateUsersSelected(index);
       const percentage = (usersSelected / totalUsers) * 100;
@@ -61,3 +74,27 @@ function calculateUsersSelected(optionIndex) {
   });
   return usersSelected;
 }
+
+// Function to show a SweetAlert message
+function showSweetAlert() {
+  Swal.fire({
+    icon: 'info',
+    title: 'Oops...',
+    text: 'You can only select one option.',
+  });
+}
+
+// Attach event listener to the checkboxes
+options.forEach((option, index) => {
+  const checkbox = option.querySelector('input[type="checkbox"]');
+  checkbox.addEventListener('change', () => {
+    if (checkbox.checked) {
+      const otherOptionsChecked = Array.from(options).filter((opt, i) => i !== index && opt.querySelector('input[type="checkbox"]').checked);
+      if (otherOptionsChecked.length > 0) {
+        checkbox.checked = false;
+        showSweetAlert();
+      }
+    }
+    updatePollResults();
+  });
+});

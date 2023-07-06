@@ -273,16 +273,16 @@ transition: border-color 0.1s, border-radius 0.1s, background-color 0.1s;
 <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js"></script> -->
 
 <!-- Add the following script tags -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<!-- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script> -->
 
 <script type="module">
 
 
-//   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-//   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
- 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getAuth,createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  
   const firebaseConfig = {
     apiKey: "AIzaSyC6EI18CIdhQAjcGR3P9O_OTHXuga8wDXQ",
     authDomain: "polling-webapp.firebaseapp.com",
@@ -294,9 +294,11 @@ transition: border-color 0.1s, border-radius 0.1s, background-color 0.1s;
   };
 
   // Initialize Firebase
-//   const app = initializeApp(firebaseConfig);
-//   const analytics = getAnalytics(app);
-firebase.initializeApp(firebaseConfig);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+
+  
 
 
   const signupForm = document.querySelector('form');
@@ -310,14 +312,16 @@ firebase.initializeApp(firebaseConfig);
     const password = passwordInput.value;
 
   
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-     
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
         window.location.href = "/index.html";
       })
       .catch((error) => {
-       
-        console.log(error);
+        // alert('please add 6 character password for good security');
+        
+        var errorCode = error.code;
+        
+        alert(errorCode);
       });
   });
 
