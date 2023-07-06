@@ -254,8 +254,6 @@ transition: border-color 0.1s, border-radius 0.1s, background-color 0.1s;
 <br>
 
 
-    <!-- <button id="google"><img src="/assets/google.png" width="15px" height="15px">
-        Log in with Google</button> -->
  <button id="google" style="display: flex; align-items: center;">
     <img src="./google.png" width="15px" height="15px" style="margin-right: 5px;">
             <span style="margin-left: 8px;">Log in with Google</span>
@@ -281,7 +279,7 @@ transition: border-color 0.1s, border-radius 0.1s, background-color 0.1s;
 
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAuth,createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  import { getAuth,createUserWithEmailAndPassword,sendEmailVerification,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
   
   const firebaseConfig = {
     apiKey: "AIzaSyC6EI18CIdhQAjcGR3P9O_OTHXuga8wDXQ",
@@ -314,7 +312,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebas
   
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-        window.location.href = "index.html";
+
+// window.location.href = 'index.html'
+
+//  now email will ne send to user using  onAuthstatechanged 
+        sendEmailVerification(userCredential.user);
+        alert('Verification email has been sent. Please check your inbox.');
       })
       .catch((error) => {
         // alert('please add 6 character password for good security');
@@ -325,6 +328,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebas
       });
   });
 
+//  email send
+
+//   sendEmailVerification(auth.currentUser)
+//   .then(() => {
+//     // Email verification sent!
+//     // ...
+//   });
 
 
 

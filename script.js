@@ -30,7 +30,15 @@ const firebaseConfig = {
   
     signInWithEmailAndPassword(auth, email.value, password.value)
     .then((userCredential) => {
-        window.location.href = 'second.html';
+  // window.location.href = 'second.html';
+
+
+      if (userCredential.user.emailVerified) {
+        // Redirect to second.html if email is verified
+        window.location.href = "second.html";
+      } else {
+        alert('Please verify your email before logging in.');
+      }
 
       })
       .catch((error) => {
