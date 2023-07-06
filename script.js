@@ -25,12 +25,12 @@ const firebaseConfig = {
     e.preventDefault(); // Prevent form submission
   
   
-    const email = emailInput.value;
-    const password = passwordInput.value;
+    const email = emailInput
+    const password = passwordInput
   
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email.value, password.value)
     .then((userCredential) => {
-        window.location.href = "second.html";
+        window.location.href = 'second.html';
 
       })
       .catch((error) => {
