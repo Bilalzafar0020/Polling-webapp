@@ -279,7 +279,7 @@ transition: border-color 0.1s, border-radius 0.1s, background-color 0.1s;
 
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAuth,createUserWithEmailAndPassword,sendEmailVerification,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  import { getAuth,createUserWithEmailAndPassword,sendEmailVerification,onAuthStateChanged   ,GoogleAuthProvider, signInWithPopup} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
   
   const firebaseConfig = {
     apiKey: "AIzaSyC6EI18CIdhQAjcGR3P9O_OTHXuga8wDXQ",
@@ -336,6 +336,47 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebas
 //     // ...
 //   });
 
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+////////////////////   google login 
+
+
+
+const provider = new GoogleAuthProvider();
+
+ let google = document.getElementById('google');
+
+ google.addEventListener('click', ()=>{
+signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    // IdP data available using getAdditionalUserInfo(result)
+    // ...
+    window.location.href = 'second.html';
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
+
+})
 
 
 

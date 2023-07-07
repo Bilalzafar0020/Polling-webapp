@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAuth,signInWithEmailAndPassword,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  import { getAuth,signInWithEmailAndPassword,onAuthStateChanged  ,GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
   
   
 const firebaseConfig = {
@@ -15,8 +15,7 @@ const firebaseConfig = {
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-
- 
+   
   const loginForm = document.getElementById('loginForm');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
@@ -49,7 +48,6 @@ const firebaseConfig = {
   
 
 
-
 //  provide login user all data 
 onAuthStateChanged(auth, (user) => {
   if (user !== null) {
@@ -80,3 +78,51 @@ onAuthStateChanged(auth, (user) => {
 // });
 
   
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////        Login with google 
+
+
+
+const provider = new GoogleAuthProvider();
+
+ let google = document.getElementById('google');
+
+ google.addEventListener('click', ()=>{
+signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    // IdP data available using getAdditionalUserInfo(result)
+    // ...
+    window.location.href = 'second.html';
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
+
+})
+
+
+
+  //  for direct sigin of users who have logined before
+  document.addEventListener('DOMContentLoaded', ()=>{
+    auth.onAuthStateChanged((user) => {
+      if (user && user.emailVerified) {
+        window.location.href = "second.html";
+        // alert('You have logined before, dont need for again login')
+      }
+    });
+    
+  })
+

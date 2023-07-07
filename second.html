@@ -46,7 +46,45 @@
             <span class="percentage-label"></span>
         </div>
     </div>
+<br><br><br>
 
-    <script src="./second.js"></script>
+<button id="out">sigout</button>
+
+
+<script type="module" >
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getAuth,signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  
+  
+const firebaseConfig = {
+  apiKey: "AIzaSyC6EI18CIdhQAjcGR3P9O_OTHXuga8wDXQ",
+  authDomain: "polling-webapp.firebaseapp.com",
+  projectId: "polling-webapp",
+  storageBucket: "polling-webapp.appspot.com",
+  messagingSenderId: "454285381080",
+  appId: "1:454285381080:web:b7ee27f5d4be178d0cf6ad",
+  measurementId: "G-HPQL66893T"
+};
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+let out = document.getElementById('out');
+out.addEventListener('click', ()=>{
+    signOut(auth).then(() => {
+window.location.href = 'index.html';
+    }).catch((error) => {
+  // An error happened.
+});
+
+})
+
+</script>
+
+
+
+<script src="./second.js"></script>
 </body>
 </html>
