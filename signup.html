@@ -200,7 +200,26 @@ transition: border-color 0.1s, border-radius 0.1s, background-color 0.1s;
 }
 
 
+.alert {
+    position: fixed;
+    top: 0;
+    left: 28rem;
+    width: 40%;
+    padding: 10px;
+    background-color: #f1f1f1;
+    color: #333;
+    /* font-weight: bold; */
+    text-align: center;
+    transition: opacity 0.5s;
+    border-radius: 5px;
+    height: 8%;
 
+  }
+  
+  .alert.hide {
+    opacity: 0;
+  }
+  
 
     </style>
 <main class="main">
@@ -264,6 +283,8 @@ transition: border-color 0.1s, border-radius 0.1s, background-color 0.1s;
 </main>
 
 
+<!--  alert box div           -->
+<div id="alertContainer"></div>
 
 
 <!-- <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
@@ -296,6 +317,24 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebas
   const auth = getAuth(app);
 
 
+  // alert message 
+  function showAlert(message, type) {
+    const alertContainer = document.getElementById('alertContainer');
+  
+    const alert = document.createElement('div');
+    alert.classList.add('alert');
+    alert.textContent = message;
+  
+    alertContainer.appendChild(alert);
+  
+    setTimeout(() => {
+      alert.classList.add('hide');
+      setTimeout(() => {
+        alert.remove();
+      }, 500);
+    }, 4000);
+  }
+
   
 
 
@@ -317,14 +356,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebas
 
 //  now email will ne send to user using  onAuthstatechanged 
         sendEmailVerification(userCredential.user);
-        alert('Verification email has been sent. Please check your inbox.');
+        showAlert('Verification email has been sent. Please check your inbox.')
       })
       .catch((error) => {
-        // alert('please add 6 character password for good security');
-        
+
         var errorCode = error.code;
         
-        alert(errorCode);
+        showAlert(errorCode)
       });
   });
 

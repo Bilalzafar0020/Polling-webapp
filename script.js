@@ -20,6 +20,30 @@ const firebaseConfig = {
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
 
+
+  // alert message 
+  function showAlert(message, type) {
+    const alertContainer = document.getElementById('alertContainer');
+  
+    const alert = document.createElement('div');
+    alert.classList.add('alert');
+    alert.textContent = message;
+  
+    alertContainer.appendChild(alert);
+  
+    setTimeout(() => {
+      alert.classList.add('hide');
+      setTimeout(() => {
+        alert.remove();
+      }, 500);
+    }, 4000);
+  }
+  
+
+
+
+
+
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault(); // Prevent form submission
   
@@ -36,13 +60,15 @@ const firebaseConfig = {
         // Redirect to second.html if email is verified
         window.location.href = "second.html";
       } else {
-        alert('Please verify your email before logging in.');
+        showAlert('Please verify your email before logging in.')
       }
 
       })
       .catch((error) => {
         const errorCode = error.code;
-        alert(errorCode);
+        // alert(errorCode);
+        showAlert(errorCode)
+
       });
   });
   
@@ -119,8 +145,13 @@ signInWithPopup(auth, provider)
   document.addEventListener('DOMContentLoaded', ()=>{
     auth.onAuthStateChanged((user) => {
       if (user && user.emailVerified) {
-        window.location.href = "second.html";
-        // alert('You have logined before, dont need for again login')
+         showAlert('You have logined before, dont need for again login')
+
+         setTimeout(()=>{
+                  window.location.href = "second.html";
+         },2000)
+        
+       
       }
     });
     
