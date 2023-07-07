@@ -1,5 +1,86 @@
 
-    .poll-option {
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=Lobster&family=Poppins:wght@400;500&family=Tsukimi+Rounded:wght@400;500&display=swap');
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'IBM Plex Sans', sans-serif;
+font-family: 'Lobster', cursive;
+font-family: 'Poppins', sans-serif;
+font-family: 'Tsukimi Rounded', sans-serif;
+}
+#out{
+    float: right;
+    margin-right: 1.2rem;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 5rem;
+    cursor: pointer;
+    border: none;
+    outline:#cbe2ff;
+margin-top: 17px;
+}
+#out:hover{
+    transform: scale(1.1);
+}
+body{
+    background-color: #fcf8f8;
+    height: 100dvh;
+    width: auto;
+}
+h2.heading{
+    text-align: center;
+    margin-top: 0.8rem;
+    font-size: 34px;
+}
+
+
+
+.alert {
+    position: fixed;
+    top: 0;
+    left: 28rem;
+    width: 40%;
+    padding: 10px;
+    background-color: #4beb2b;
+    color: #000000;
+    font-weight: bold;
+    text-align: center;
+    transition: opacity 0.5s;
+    border-radius: 5px;
+    height: 8%;
+
+  }
+  
+  .alert.hide {
+    opacity: 0;
+  }
+
+  div.poll{height: 100px;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4rem;
+    margin-left: 36rem;
+    border: solid black 1px ;
+  }
+.pbutton{
+    cursor: pointer;
+   color: #f1f1f1;
+   background-color: #4011eb;
+   border-radius: 5px;
+   width: 8rem;
+   height: 3.8rem;
+   border: none;
+   outline: none;
+   font-size: 14px;
+   letter-spacing: 2px;
+}
+
+    /* .poll-option {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
@@ -28,5 +109,5 @@
     .percentage-label {
         margin-left: 10px;
         font-weight: bold;
-    }
+    } */
 

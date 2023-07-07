@@ -9,7 +9,25 @@
 
 </head>
 <body>
-    <h1>Which programming language do you like the most?</h1>
+
+<!--  alert box div           -->
+<div id="alertContainer"></div>
+
+
+<button id="out" >
+    <img src="./profile.png" width="43px" height="40px"  >
+</button>
+<br>
+
+<h2 class="heading">Polling Application</h2>
+
+
+
+<div class="poll" >
+
+    <button id="poll" class="pbutton">Create Poll</button>
+</div>
+    <!-- <h1>Which programming language do you like the most?</h1>
 
     <div class="poll-option">
         <div class="poll-bar-container">
@@ -46,45 +64,12 @@
             <span class="percentage-label"></span>
         </div>
     </div>
-<br><br><br>
-
-<button id="out">sigout</button>
-
-
-<script type="module" >
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAuth,signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-  
-  
-const firebaseConfig = {
-  apiKey: "AIzaSyC6EI18CIdhQAjcGR3P9O_OTHXuga8wDXQ",
-  authDomain: "polling-webapp.firebaseapp.com",
-  projectId: "polling-webapp",
-  storageBucket: "polling-webapp.appspot.com",
-  messagingSenderId: "454285381080",
-  appId: "1:454285381080:web:b7ee27f5d4be178d0cf6ad",
-  measurementId: "G-HPQL66893T"
-};
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-let out = document.getElementById('out');
-out.addEventListener('click', ()=>{
-    signOut(auth).then(() => {
-window.location.href = 'index.html';
-    }).catch((error) => {
-  // An error happened.
-});
-
-})
-
-</script>
+<br><br><br> -->
 
 
 
-<script src="./second.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="./second.js"  type="module"></script>
 </body>
 </html>
