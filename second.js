@@ -97,6 +97,8 @@ const firebaseConfig = {
       });
 
 
+ ////////////////////////////////////          log out code 
+
 logOut.addEventListener('click', ()=>{
     signOut(auth).then(() => {
        
@@ -145,7 +147,7 @@ pollButton.addEventListener('click', ()=>{
   focusConfirm: false,
   showCancelButton: true,
   confirmButtonColor: "#2ded27",
-  confirmButtonText: "Edit",
+  confirmButtonText: "Create",
   cancelButtonText: "Cancel",
   preConfirm: () => {
     return [

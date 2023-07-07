@@ -134,7 +134,7 @@ div.signup{
     flex-direction: row;
     text-align: center;
     margin-left: 24px;
-    gap: 16px;
+    gap: 53px;
 }
 
 h3.createaccount{
@@ -189,3 +189,56 @@ transition: border-color 0.1s, border-radius 0.1s, background-color 0.1s;
     opacity: 0;
   }
   
+
+
+  @media all and (max-width:408px) and (min-width:346px) {
+    div.extra{
+        width: 304px;
+        height: 30rem;
+    }
+      
+div.logo{
+        width:19rem;
+        height: 10rem;
+    }
+    
+    div.login{
+    width:19rem;
+        height: 25rem;
+    }
+    div.signup{
+        margin-left: 20px;
+        gap: 19px;
+    }
+    button#google{
+        margin-left: 36px;
+    }
+}
+
+
+
+@media all and (max-width:346px) and (min-width:320px) {
+    div.extra{
+        width: 280px;
+        height: 30rem;
+    }
+      
+div.logo{
+        width:17.5rem;
+        height: 10rem;
+    }
+    
+    div.login{
+    width:17.5rem;
+        height: 25rem;
+    }
+    div.signup{
+        margin-left: 15px;
+        gap: 12px;
+    }
+    button#google{
+        margin-left: 22px;
+    }
+}
+
+
