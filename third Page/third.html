@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Polling-webapp</title>
-    <link rel="stylesheet" href="./second.css">
-    <link rel="shortcut icon" href="./download__1_-removebg-preview.png" type="image/x-icon">
+    <link rel="stylesheet" href="./third.css">
+    <link rel="shortcut icon" href="../download__1_-removebg-preview.png" type="image/x-icon">
 
 <!-- font link -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,10 +24,10 @@
 
     <h2 class="heading">Polling Application</h2>
     
-    <img src="./download__1_-removebg-preview.png" width="45px" height="45px" class="logo">
+    <img src="../download__1_-removebg-preview.png" width="45px" height="45px" class="logo">
 
     <button id="out" >
-    <img src="./profile.png" width="43px" height="40px"   id="profile">
+    <img src="../profile.png" width="43px" height="40px"   id="profile">
 </button>
 <br>
 
@@ -37,30 +37,15 @@
 
 <main>
 
-    <div class="text">
-<h1 class="first">Start gathering real-time feedback, 
-     and making informed decisions today</h1>
-
-<h3 class="second">
-    Our user-friendly interface allows effortless poll creation,
-    participate, and vote in real-time polls, making it easy to gather
-     feedback and opinions from remote and in-person participants.
-</h3>
-
-
-<a href="./third Page/third.html"
-style="text-decoration: none;color: #ffffff;height: fit-content; width: fit-content;">
-<button id="poll" class="pbutton">Get Started</button></a>
+<button id="poll" class="pbutton">Create Poll</button>
 
     </div>
 
-
-<div>
-    <img src="./main.png" width="480px" height="480px" class="main">
-</div>
-
-
 </main>
+
+
+<div id="pollContainer"></div>
+
 <!-- 
 <div class="poll" >
 
@@ -107,7 +92,8 @@ style="text-decoration: none;color: #ffffff;height: fit-content; width: fit-cont
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script src="./second.js"  type="module"></script>
+<script src="./third.js"  type="module"></script>
 </body>
 </html>
