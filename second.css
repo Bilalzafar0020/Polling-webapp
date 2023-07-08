@@ -12,9 +12,10 @@ font-family: 'Poppins', sans-serif;
 font-family: 'Tsukimi Rounded', sans-serif;
 }
 body{
-    background-color: #d3d8df;
+    background-color: #b5dcf3; /*  #e2e8f0*/
     height: 100%;
     max-width: 100%;
+  overflow: hidden;
 }
 header{
     display: flex;
@@ -40,10 +41,11 @@ margin-left: 66%;
 }
 h2.heading{
     margin-top: 0.3rem;
-    font-size: 32px;
-    font-weight:550;
+    font-size: 29px;
+    font-weight:560;
     margin-left: 1rem;
     color: rgb(0, 0, 255);
+    font-family: sans-serif;
 }
 
 .alert {
@@ -66,27 +68,76 @@ h2.heading{
     opacity: 0;
   }
 
-  div.poll{height: 100px;
-    width: 150px;
+main{
     display: flex;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
-    margin-top: auto;
-    margin-left: auto;
-    border: solid black 1px ;
-  }
-.pbutton{
-    cursor: pointer;
-   color: #f1f1f1;
-   background-color: #4011eb;
-   border-radius: 5px;
-   width: 8rem;
-   height: 3.8rem;
-   border: none;
-   outline: none;
-   font-size: 14px;
-   letter-spacing: 2px;
+    justify-content: center;
+    margin-left: 80px;
+    margin-right: 90px;
 }
+div.text{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.pbutton {
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #00aaff;
+    border-radius: 5px;
+    width: 8rem;
+    height: 3.8rem;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    letter-spacing: 2px;
+    font-weight: 580;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s ease-in-out, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease-in-out;
+  }
+  
+  .pbutton:before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .pbutton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: #0099ff;
+  }
+  
+  .pbutton:hover:before {
+    opacity: 1;
+  }
+  
+h1.first{
+    color: #0f172a;
+    font-weight:bolder;
+    font-family: 'IBM Plex Sans', sans-serif;
+font-family: 'Lobster', cursive;
+font-family: 'Open Sans', sans-serif;
+font-family: 'Poppins', sans-serif;
+font-family: 'Tsukimi Rounded', sans-serif;
+font-size:37px;
+}
+h3.second{
+   color:#515a69;
+   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;  
+}
+
+
 
 
 @media all and (max-width:1260px)  and (min-width: 1030px){
@@ -140,11 +191,22 @@ h2.heading{
     }
     .logo{
         margin-left: -3px;
-        width: 31px;
-        height: 31px;
+        width: 28px;
+        height: 28px;
     } 
     #out{
     margin-left: 58%;
+    }
+    header{
+        height: 9vh;
+    }
+    #out{
+        height: 1.8rem;
+        width: 2rem;
+    }
+    img#profile{
+        width:35px ;
+        height:34px
     }
 }
 @media all and (max-width:590px)  and (min-width: 510px){
@@ -154,11 +216,22 @@ h2.heading{
     }
     .logo{
         margin-left: -3px;
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
     } 
     #out{
     margin-left: 55%;
+    }
+    header{
+        height: 9vh;
+    }
+    #out{
+        height: 1.8rem;
+        width: 2rem;
+    }
+    img#profile{
+        width:31px ;
+        height:32px
     }
 }
 @media all and (max-width:510px)  and (min-width: 446px){
@@ -167,12 +240,24 @@ h2.heading{
         font-size: 14px;
     }
     .logo{
-        margin-left: 22px;
-        width: 26px;
-        height: 26px;
+        margin-left: 3px;
+        width: 19px;
+        height: 19px;
     } 
     #out{
-    margin-left: 47%;
+    margin-left: 52%;
+    }
+    header{
+        height: 8.5vh;
+    }
+    #out{
+        height: 1.8rem;
+        width: 1.8rem;
+        margin-top: 3px;
+    }
+    img#profile{
+        width:27px ;
+        height:29px
     }
 }
 @media all and (max-width:446px)  and (min-width: 360px){
@@ -181,12 +266,24 @@ h2.heading{
         font-size: 10px;
     }
     .logo{
-        
-        width: 26px;
-        height: 26px;
+        margin-left: -4px;
+        width: 15px;
+        height: 15px;
     } 
     #out{
-    margin-left: 50%;
+    margin-left: 52%;
+    }
+    header{
+        height: 8vh;
+    }
+    #out{
+        height: 1.8rem;
+        width: 1.8rem;
+        margin-top: 3px;
+    }
+    img#profile{
+        width:27px ;
+        height:29px
     }
 }
 @media all and (max-width:360px)  and (min-width: 320px){
@@ -195,11 +292,24 @@ h2.heading{
         font-size: 8px;
     }
     .logo{
-        width: 24px;
-        height: 24px;
+        margin-left: -4px;
+        width: 13px;
+        height: 13px;
     } 
     #out{
-    margin-left: 45%;
+    margin-left: 48%;
+    }
+    header{
+        height: 8vh;
+    }
+    #out{
+        height: 1.8rem;
+        width: 1.8rem;
+        margin-top: 3px;
+    }
+    img#profile{
+        width:27px ;
+        height:29px
     }
 }
 /* .poll-option {
