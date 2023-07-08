@@ -173,10 +173,10 @@ pollButton.addEventListener('click', ()=>{
 
     addDoc(collection(db, "polls"), pollData)
       .then(() => {
-        showAlert('Poll created successfully');
+          showAlert('Poll created successfully');
       })
       .catch((error) => {
-        // showAlert(`Error creating poll: ${error}`);
+        showAlert(`Error creating poll: ${error}`);
         console.log(error);
       });
   }
