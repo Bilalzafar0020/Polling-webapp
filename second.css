@@ -47,11 +47,11 @@ h2.heading{
     color: rgb(0, 0, 255);
     font-family: sans-serif;
 }
-
 .alert {
     position: fixed;
-    top: 0;
-    left: 28rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 40%;
     padding: 10px;
     background-color: #4beb2b;
@@ -60,14 +60,13 @@ h2.heading{
     text-align: center;
     transition: opacity 0.5s;
     border-radius: 5px;
-    height: 8%;
-
+    z-index: 9999;
   }
   
   .alert.hide {
     opacity: 0;
   }
-
+  
 main{
     display: flex;
     flex-direction: row;

@@ -39,7 +39,23 @@ const firebaseConfig = {
     }, 4000);
   }
 
+// Sticky alert   (help from chatgpt so that alert should be responsive)
+window.addEventListener('scroll', function () {
+  const alertContainer = document.getElementById('alertContainer');
+  const alert = alertContainer.querySelector('.alert');
+  if (alert) {
+    const alertHeight = alert.offsetHeight;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    const windowBottom = scrollTop + windowHeight;
 
+    if (windowBottom > alertContainer.offsetTop + alertHeight) {
+      alert.classList.add('sticky');
+    } else {
+      alert.classList.remove('sticky');
+    }
+  }
+});
 
 
 
