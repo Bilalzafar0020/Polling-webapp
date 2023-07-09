@@ -165,7 +165,7 @@ signInWithPopup(auth, provider)
          showAlert('You have logined before, dont need for again login')
 
          setTimeout(()=>{
-                  window.location.href = "second.html";
+                  window.location.href = './third page/third.html';
          },2000)
         
        
