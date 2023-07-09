@@ -166,7 +166,7 @@ signInWithPopup(auth, provider)
 // why this file path is incorrect in github 
 
          setTimeout(()=>{
-                  window.location.href = '../third Page/third.html';
+                  window.location.href = './third%20Page/third.html';
          },2000)
         
        
