@@ -163,9 +163,10 @@ signInWithPopup(auth, provider)
     auth.onAuthStateChanged((user) => {
       if (user && user.emailVerified) {
          showAlert('You have logined before, dont need for again login')
+// why this file path is incorrect in github 
 
          setTimeout(()=>{
-                  window.location.href = './third Page/third.html';
+                  window.location.href = '../third Page/third.html';
          },2000)
         
        
