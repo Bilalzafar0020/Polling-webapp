@@ -1,5 +1,6 @@
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, addDoc,getDocs,onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc,getDocs,onSnapshot,doc,updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 import { getAuth,signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
   
@@ -161,10 +162,10 @@ pollButton.addEventListener('click', ()=>{
     title: 'Fill inputs to Create Poll',
   html:
   '<input id="swal-input1" class="swal2-input" style="width: 549px;" maxLength = 80; placeholder="Enter label of Poll, e.g which flower is most beautiful">' +
-  '<input id="swal-input2" class="swal2-input" placeholder="Enter option 1" maxLength = 10;>' +
-  '<input id="swal-input3" class="swal2-input" placeholder="Enter option 2" maxLength = 10;>' +
-  '<input id="swal-input4" class="swal2-input" placeholder="Enter option 3" maxLength = 10;>' +
-  '<input id="swal-input5" class="swal2-input" placeholder="Enter option 4" maxLength = 10;>', 
+  '<input id="swal-input2" class="swal2-input" placeholder="Enter option 1" maxLength = 12;>' +
+  '<input id="swal-input3" class="swal2-input" placeholder="Enter option 2" maxLength = 12;>' +
+  '<input id="swal-input4" class="swal2-input" placeholder="Enter option 3" maxLength = 12;>' +
+  '<input id="swal-input5" class="swal2-input" placeholder="Enter option 4" maxLength = 12;>', 
   focusConfirm: false,
   showCancelButton: true,
   confirmButtonColor: "#2ded27",
@@ -190,7 +191,8 @@ pollButton.addEventListener('click', ()=>{
     // Add the poll data to Firestore collection
     const pollData = {
       label: label,
-      options: [option1, option2, option3, option4]
+      options: [option1, option2, option3, option4],
+  percentages: [0, 0, 0, 0]
     };
 
     addDoc(collection(db, "polls"), pollData)
@@ -218,7 +220,6 @@ setTimeout(
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 let mainDiv = document.getElementById('main');
 
 
@@ -239,83 +240,185 @@ pollsContainer.style.flexDirection = 'column';
 mainDiv.insertAdjacentElement('afterend', pollsContainer);
 
 
+// ...
+
+// ...
+
 // Updating the retrieveData function to append polls to the polls container
 let retrieveData = async function() {
   const querySnapshot = await getDocs(collection(db, 'polls'));
 
-  querySnapshot.forEach((doc) => {
-    const pollData = doc.data();
-    const pollId = doc.id;
+  querySnapshot.forEach((docum) => {
+    const pollData = docum.data();
+    const pollId = docum.id; // Get the ID of the document
 
-    // a poll container
+    const label = pollData.label;
+    const options = pollData.options;
+    const percentages = pollData.percentages;
+
+    // Check if the user has already voted for this poll
+    const userVote = pollData.votes ? pollData.votes[auth.currentUser.uid] : null;
+
+    // Create the poll container
     const pollDiv = document.createElement('div');
     pollDiv.classList.add('poll');
     pollDiv.style.marginBottom = '20px';
 
-
-
-    // a poll label input
+    // Create the poll label input
     const pollLabel = document.createElement('input');
     pollLabel.type = 'text';
-    pollLabel.value = pollData.label;
+    pollLabel.value = label;
     pollLabel.disabled = true;
     pollLabel.classList.add('inputs');
 
-    // Append poll label input;
+    // Append poll label input
     pollDiv.appendChild(pollLabel);
 
-
-
-    // a poll options
-    pollData.options.forEach((option) => {
+    // Create poll options
+    options.forEach((option, index) => {
       // Creating option container
       const optionDiv = document.createElement('div');
-optionDiv.classList.add('optionsDiv');
-
+      optionDiv.classList.add('optionsDiv');
 
       // Creating checkbox
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
-checkbox.classList.add('checkboxes');
+      checkbox.classList.add('checkboxes');
+      checkbox.disabled = userVote !== null; // Disable checkbox if user has already voted
 
-      // Creating  checkbox option label
+      // Creating checkbox option label
       const optionLabel = document.createElement('label');
       optionLabel.textContent = option;
-optionLabel.classList.add('optionLabel')
+      optionLabel.classList.add('optionLabel');
 
+      // Creating percentage label
+      const percentageLabel = document.createElement('span');
+      percentageLabel.classList.add('percentageLabel');
+      percentageLabel.textContent = `${percentages[index]}%`;
 
-
-
-      // Append checkbox and option label to option container
+      // Append checkbox, option label, and percentage label to option container
       optionDiv.appendChild(checkbox);
       optionDiv.appendChild(optionLabel);
+      optionDiv.appendChild(percentageLabel);
 
       // Append option container to poll container
       pollDiv.appendChild(optionDiv);
 
-      
+
+      checkbox.addEventListener('click', () => {
+        if (userVote !== null) {
+          showAlert('You have already voted for this poll');
+          checkbox.checked = false; // Uncheck the checkbox
+        }
+      });
     });
 
-    // Append poll container to poll div 
+    // Create vote button
+    const voteButton = document.createElement('button');
+    voteButton.classList.add('voteButton');
+    voteButton.textContent = 'Vote';
+
+    function getUpdatedPercentages(selectedOptions) {
+      const percentages = [0, 0, 0, 0];
+
+      // Calculate the total number of selected options
+      const totalSelected = selectedOptions.length;
+
+      // Increment the count for each selected option
+      selectedOptions.forEach((index) => {
+        percentages[index]++;
+      });
+
+      // Calculate the percentages based on the total selected
+      percentages.forEach((count, index) => {
+        percentages[index] = (count / totalSelected) * 100;
+      });
+
+      return percentages;
+    }
+    
+
+    // Add event listener to the vote button
+    voteButton.addEventListener('click', () => {
+     
+      if (userVote !== null) {
+        showAlert('You have already voted for this poll');
+        return;
+      }
+      
+      const checkboxes = pollDiv.querySelectorAll('.checkboxes');
+      const selectedOptions = [];
+
+      checkboxes.forEach((checkbox, index) => {
+        if (checkbox.checked) {
+          selectedOptions.push(index);
+        }
+      });
+      
+      if (selectedOptions.length === 0) {
+        showAlert('Please select an option');
+        return;
+      }
+
+      const pollRef = doc(db, 'polls', pollId);
+      console.log(docum.id);
+
+      console.log('pollId:', pollId);
+
+      const votes = {
+        ...pollData.votes, // Keep the existing votes
+        [auth.currentUser.uid]: selectedOptions[0],      // [auth.currentUser.uid]: selectedOptions[0],
+      };
+
+      // Update the percentages in Firestore
+      updateDoc(pollRef, {
+        percentages: getUpdatedPercentages(selectedOptions),
+        votes: votes, // Store the user's vote
+      })
+        .then(() => {
+          showAlert('Vote submitted successfully');
+
+          // Retrieve the updated poll data from Firestore
+          doc(pollRef)
+            .get()
+            .then((doc) => {
+              if (doc.exists()) {
+                const updatedPollData = doc.data();
+                const updatedPercentages = updatedPollData.percentages;
+
+                // Update the percentage labels in the UI
+                const percentageLabels = pollDiv.querySelectorAll('.percentageLabel');
+                percentageLabels.forEach((label, index) => {
+                  label.textContent = `${updatedPercentages[index]}%`;
+                });
+
+                // Disable checkboxes after voting
+                checkboxes.forEach((checkbox) => {
+                  checkbox.disabled = true;
+                });
+              }
+            })
+            .catch((error) => {
+              // showAlert('Failed to retrieve updated poll data');
+              console.error('Error retrieving updated poll data:', error);
+            });
+        })
+        .catch((error) => {
+          // showAlert('Failed to submit vote');
+          console.error('Error updating vote:', error);
+        });
+    });
+
+    // Append vote button to poll container
+    pollDiv.appendChild(voteButton);
+
+    // Append poll container to polls container
     pollsContainer.appendChild(pollDiv);
-
-
-
-//   vote button
-let vote = document.createElement('button');
-vote.classList.add('voteButton')
-vote.textContent = 'Vote';
-
-
-    // append to poll div
-pollDiv.appendChild(vote);
-
-
-
-
   });
-  
 };
+
+// ...
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////   Firestore listener for real-time updates          ///////////////////////////////////////////////////////////////
@@ -341,5 +444,3 @@ const unsubscribe = onSnapshot(pollsCollectionRef, (snapshot) => {
     console.error("Error updating polls:", error);
   });
 });
-
-
