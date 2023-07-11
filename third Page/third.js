@@ -243,8 +243,6 @@ mainDiv.insertAdjacentElement('afterend', pollsContainer);
 // ...
 
 // ...
-
-// Updating the retrieveData function to append polls to the polls container
 let retrieveData = async function() {
   const querySnapshot = await getDocs(collection(db, 'polls'));
 
@@ -255,9 +253,6 @@ let retrieveData = async function() {
     const label = pollData.label;
     const options = pollData.options;
     const percentages = pollData.percentages;
-
-    // Check if the user has already voted for this poll
-    const userVote = pollData.votes ? pollData.votes[auth.currentUser.uid] : null;
 
     // Create the poll container
     const pollDiv = document.createElement('div');
@@ -284,7 +279,6 @@ let retrieveData = async function() {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.classList.add('checkboxes');
-      checkbox.disabled = userVote !== null; // Disable checkbox if user has already voted
 
       // Creating checkbox option label
       const optionLabel = document.createElement('label');
@@ -303,14 +297,6 @@ let retrieveData = async function() {
 
       // Append option container to poll container
       pollDiv.appendChild(optionDiv);
-
-
-      checkbox.addEventListener('click', () => {
-        if (userVote !== null) {
-          showAlert('You have already voted for this poll');
-          checkbox.checked = false; // Uncheck the checkbox
-        }
-      });
     });
 
     // Create vote button
@@ -318,34 +304,22 @@ let retrieveData = async function() {
     voteButton.classList.add('voteButton');
     voteButton.textContent = 'Vote';
 
-    function getUpdatedPercentages(selectedOptions) {
-      const percentages = [0, 0, 0, 0];
-
-      // Calculate the total number of selected options
-      const totalSelected = selectedOptions.length;
-
-      // Increment the count for each selected option
-      selectedOptions.forEach((index) => {
-        percentages[index]++;
+    function getUpdatedPercentages(votes) {
+      const totalVotes = Object.values(votes).length;
+      const counts = [0, 0, 0, 0];
+    
+      // Count the votes for each option
+      Object.values(votes).forEach((optionIndex) => {
+        counts[optionIndex]++;
       });
-
-      // Calculate the percentages based on the total selected
-      percentages.forEach((count, index) => {
-        percentages[index] = (count / totalSelected) * 100;
-      });
-
+    
+      // Calculate the percentages based on the total votes
+      const percentages = counts.map((count) => (count / totalVotes) * 100);
       return percentages;
     }
     
-
     // Add event listener to the vote button
     voteButton.addEventListener('click', () => {
-     
-      if (userVote !== null) {
-        showAlert('You have already voted for this poll');
-        return;
-      }
-      
       const checkboxes = pollDiv.querySelectorAll('.checkboxes');
       const selectedOptions = [];
 
@@ -354,37 +328,33 @@ let retrieveData = async function() {
           selectedOptions.push(index);
         }
       });
-      
+
       if (selectedOptions.length === 0) {
         showAlert('Please select an option');
         return;
       }
 
       const pollRef = doc(db, 'polls', pollId);
-      console.log(docum.id);
-
-      console.log('pollId:', pollId);
 
       const votes = {
         ...pollData.votes, // Keep the existing votes
-        [auth.currentUser.uid]: selectedOptions[0],      // [auth.currentUser.uid]: selectedOptions[0],
+        [auth.currentUser.uid]: selectedOptions[0],
       };
 
-      // Update the percentages in Firestore
-      updateDoc(pollRef, {
-        percentages: getUpdatedPercentages(selectedOptions),
-        votes: votes, // Store the user's vote
-      })
+      // Update the votes in Firestore
+  updateDoc(pollRef, { votes, percentages: getUpdatedPercentages(votes) })
         .then(() => {
           showAlert('Vote submitted successfully');
 
+
+// Updating the retrieveData function to append polls to the polls container
           // Retrieve the updated poll data from Firestore
           doc(pollRef)
             .get()
             .then((doc) => {
               if (doc.exists()) {
                 const updatedPollData = doc.data();
-                const updatedPercentages = updatedPollData.percentages;
+                const updatedPercentages = getUpdatedPercentages(updatedPollData.votes);
 
                 // Update the percentage labels in the UI
                 const percentageLabels = pollDiv.querySelectorAll('.percentageLabel');
@@ -444,3 +414,4 @@ const unsubscribe = onSnapshot(pollsCollectionRef, (snapshot) => {
     console.error("Error updating polls:", error);
   });
 });
+

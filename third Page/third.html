@@ -50,11 +50,6 @@
  -->
 <!--  
 
-
-
-
-
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getFirestore, collection, addDoc,getDocs,onSnapshot,doc,updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 import { getAuth,signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -238,25 +233,18 @@ pollButton.addEventListener('click', ()=>{
       Swal.showValidationMessage('Please fill in all the fields');
       return false;
     }
-    return {
-      label: label,
-      options: [
-        { text: option1, votes: 0 },
-        { text: option2, votes: 0 },
-        { text: option3, votes: 0 },
-        { text: option4, votes: 0 },
-      ],
-    };
+
+    return [label, option1, option2, option3, option4];
   }
 }).then((result) => {
   if (result.isConfirmed) {
-    const { label, options } = result.value;
-      const pollData = {
-        label: label,
-        options: options,
-      };
-
-    
+    const [label, option1, option2, option3, option4] = result.value;
+    // Add the poll data to Firestore collection
+    const pollData = {
+      label: label,
+      options: [option1, option2, option3, option4],
+  percentages: [0, 0, 0, 0]
+    };
 
     addDoc(collection(db, "polls"), pollData)
       .then(() => {
@@ -306,8 +294,6 @@ mainDiv.insertAdjacentElement('afterend', pollsContainer);
 // ...
 
 // ...
-
-// Updating the retrieveData function to append polls to the polls container
 let retrieveData = async function() {
   const querySnapshot = await getDocs(collection(db, 'polls'));
 
@@ -317,14 +303,7 @@ let retrieveData = async function() {
 
     const label = pollData.label;
     const options = pollData.options;
-
-    // Check if the user has already voted for this poll
-    const userVote = pollData.votes ? pollData.votes[auth.currentUser.uid] : null;
-
-
- // Calculate the total votes for each option
- const totalVotes = options.reduce((total, option) => total + option.votes, 0);
-
+    const percentages = pollData.percentages;
 
     // Create the poll container
     const pollDiv = document.createElement('div');
@@ -351,17 +330,16 @@ let retrieveData = async function() {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.classList.add('checkboxes');
-      checkbox.disabled = userVote !== null; // Disable checkbox if user has already voted
 
       // Creating checkbox option label
       const optionLabel = document.createElement('label');
-      optionLabel.textContent = option.text;
+      optionLabel.textContent = option;
       optionLabel.classList.add('optionLabel');
 
       // Creating percentage label
       const percentageLabel = document.createElement('span');
       percentageLabel.classList.add('percentageLabel');
-      percentageLabel.textContent = `${(option.votes / totalVotes * 100).toFixed(2)}%`;
+      percentageLabel.textContent = `${percentages[index]}%`;
 
       // Append checkbox, option label, and percentage label to option container
       optionDiv.appendChild(checkbox);
@@ -398,11 +376,6 @@ let retrieveData = async function() {
 
     // Add event listener to the vote button
     voteButton.addEventListener('click', () => {
-      if (userVote !== null) {
-        showAlert('You have already voted for this poll');
-        return;
-      }
-
       const checkboxes = pollDiv.querySelectorAll('.checkboxes');
       const selectedOptions = [];
 
@@ -411,49 +384,41 @@ let retrieveData = async function() {
           selectedOptions.push(index);
         }
       });
-    
+
+      if (selectedOptions.length === 0) {
+        showAlert('Please select an option');
+        return;
+      }
 
       const pollRef = doc(db, 'polls', pollId);
-      console.log(docum.id);
-
-      console.log('pollId:', pollId);
 
       const votes = {
+        ...pollData.votes, // Keep the existing votes
         [auth.currentUser.uid]: selectedOptions[0],
       };
 
       // Update the percentages in Firestore
       updateDoc(pollRef, {
-        options: options.map((option, index) => {
-          if (selectedOptions.includes(index)) {
-            return {
-              ...option,
-              votes: option.votes + 1,
-            };
-          } else {
-            return option;
-          }
-        }),
+        percentages: getUpdatedPercentages(selectedOptions),
         votes: votes, // Store the user's vote
       })
         .then(() => {
           showAlert('Vote submitted successfully');
 
+
+// Updating the retrieveData function to append polls to the polls container
           // Retrieve the updated poll data from Firestore
           doc(pollRef)
             .get()
             .then((doc) => {
               if (doc.exists()) {
                 const updatedPollData = doc.data();
-                const updatedOptions = updatedPollData.options;
+                const updatedPercentages = updatedPollData.percentages;
 
                 // Update the percentage labels in the UI
                 const percentageLabels = pollDiv.querySelectorAll('.percentageLabel');
                 percentageLabels.forEach((label, index) => {
-                  const votes = updatedOptions[index].votes;
-                  const totalVotes = updatedOptions.reduce((total, option) => total + option.votes, 0);
-                  const percentage = totalVotes > 0 ? ((votes / totalVotes) * 100).toFixed(2) : 0;
-                  label.textContent = `${percentage}%`;
+                  label.textContent = `${updatedPercentages[index]}%`;
                 });
 
                 // Disable checkboxes after voting
@@ -463,12 +428,12 @@ let retrieveData = async function() {
               }
             })
             .catch((error) => {
-              showAlert('Failed to retrieve updated poll data');
+              // showAlert('Failed to retrieve updated poll data');
               console.error('Error retrieving updated poll data:', error);
             });
         })
         .catch((error) => {
-          showAlert('Failed to submit vote');
+          // showAlert('Failed to submit vote');
           console.error('Error updating vote:', error);
         });
     });
@@ -508,6 +473,15 @@ const unsubscribe = onSnapshot(pollsCollectionRef, (snapshot) => {
     console.error("Error updating polls:", error);
   });
 });
+
+
+
+
+
+
+
+
+
 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
