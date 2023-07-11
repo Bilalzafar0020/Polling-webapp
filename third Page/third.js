@@ -234,7 +234,7 @@ pollsContainer.style.display = 'flex';
 pollsContainer.style.alignItems = 'center';
 pollsContainer.style.justifyContent ='center';
 pollsContainer.style.flexDirection = 'column';
-
+pollsContainer.classList.add('pollContainer');
 
 // Inserting the polls container after the main div
 mainDiv.insertAdjacentElement('afterend', pollsContainer);
@@ -290,10 +290,28 @@ let retrieveData = async function() {
       percentageLabel.classList.add('percentageLabel');
       percentageLabel.textContent = `${percentages[index]}%`;
 
+     ///  creating poll bar to show visual of percentage
+      const pollBarContainer = document.createElement('div');
+      pollBarContainer.classList.add('pollBarContainer');
+      
+      // Creating the poll bar fill
+      const pollBarFill = document.createElement('div');
+      pollBarFill.classList.add('pollBarFill');
+      pollBarFill.style.width = `${percentages[index]}%`;
+      pollBarFill.id = `pollBar_${pollId}_${index}`; // Unique ID for each poll bar
+      
+      // Append the poll bar fill to the poll bar container
+      pollBarContainer.appendChild(pollBarFill);
+      
+ 
+
       // Append checkbox, option label, and percentage label to option container
       optionDiv.appendChild(checkbox);
       optionDiv.appendChild(optionLabel);
       optionDiv.appendChild(percentageLabel);
+      
+     // Append the poll bar container to the option container
+      optionDiv.appendChild(pollBarContainer);
 
       // Append option container to poll container
       pollDiv.appendChild(optionDiv);
@@ -304,6 +322,14 @@ let retrieveData = async function() {
     voteButton.classList.add('voteButton');
     voteButton.textContent = 'Vote';
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  updating percenatge to  database  and also getting back updated percentage and votes        ///////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//  for percentage  
     function getUpdatedPercentages(votes) {
       const totalVotes = Object.values(votes).length;
       const counts = [0, 0, 0, 0];
@@ -341,14 +367,15 @@ let retrieveData = async function() {
         [auth.currentUser.uid]: selectedOptions[0],
       };
 
-      // Update the votes in Firestore
+      //////////////////////////////////////////////////////
+      /////////////////////////////////
+      ////////////////////////////////// Update the votes in Firestore
   updateDoc(pollRef, { votes, percentages: getUpdatedPercentages(votes) })
         .then(() => {
           showAlert('Vote submitted successfully');
 
 
-// Updating the retrieveData function to append polls to the polls container
-          // Retrieve the updated poll data from Firestore
+          // Retrieving the updated poll data from Firestore
           doc(pollRef)
             .get()
             .then((doc) => {
@@ -360,6 +387,12 @@ let retrieveData = async function() {
                 const percentageLabels = pollDiv.querySelectorAll('.percentageLabel');
                 percentageLabels.forEach((label, index) => {
                   label.textContent = `${updatedPercentages[index]}%`;
+                });
+  
+                //   increasing or decreasing poll bar according to percenatage of unique id
+                updatedPercentages.forEach((percentage, index) => {
+                  const pollBarFill = document.getElementById(`pollBar_${pollId}_${index}`);
+                  pollBarFill.style.width = `${percentage}%`;
                 });
 
                 // Disable checkboxes after voting
