@@ -1,6 +1,6 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, addDoc,getDocs,onSnapshot,doc,updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc,getDocs,onSnapshot,doc,updateDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 import { getAuth,signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
   
@@ -192,7 +192,8 @@ pollButton.addEventListener('click', ()=>{
     const pollData = {
       label: label,
       options: [option1, option2, option3, option4],
-  percentages: [0, 0, 0, 0]
+  percentages: [0, 0, 0, 0],
+  timestamp: serverTimestamp()
     };
 
     addDoc(collection(db, "polls"), pollData)
@@ -227,7 +228,7 @@ let mainDiv = document.getElementById('main');
 const pollsContainer = document.createElement('div');
 pollsContainer.style.overflow = 'auto';
 pollsContainer.style.width = '90%';
-pollsContainer.style.marginLeft = '60px';
+pollsContainer.style.marginLeft = '30px';
 pollsContainer.classList.add('pollsContainer');
 pollsContainer.style.marginTop = '35px'
 pollsContainer.style.display = 'flex';
@@ -244,7 +245,7 @@ mainDiv.insertAdjacentElement('afterend', pollsContainer);
 
 // ...
 let retrieveData = async function() {
-  const querySnapshot = await getDocs(collection(db, 'polls'));
+  const querySnapshot = await getDocs(query(collection(db, 'polls'), orderBy('timestamp', 'desc'))); //  changes here
 
   querySnapshot.forEach((docum) => {
     const pollData = docum.data();
@@ -372,7 +373,7 @@ let retrieveData = async function() {
       ////////////////////////////////// Update the votes in Firestore
   updateDoc(pollRef, { votes, percentages: getUpdatedPercentages(votes) })
         .then(() => {
-          showAlert('Vote submitted successfully');
+          // showAlert('Vote submitted successfully');
 
 
           // Retrieving the updated poll data from Firestore
